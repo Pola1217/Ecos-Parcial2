@@ -1,0 +1,30 @@
+body {
+    align-items: center;
+    justify-content: center;
+    display:flex;
+    flex-direction: column; 
+}
+
+.Bcard {
+    width: 200px;
+    color:rgb(11, 0, 73);
+    text-align: center;
+    padding: 15px;
+    margin: auto;
+    background-color: rgb(132, 184, 177);
+}
+
+.Btitle {
+    color: aliceblue;
+    text-align: left;
+    line-height: 10px;
+    font-weight: 500;
+}
+
+.Brating {
+    color: rgb(6, 60, 92);
+    text-align: right;
+    line-height: 10px;
+    font-weight: 500;
+
+}
