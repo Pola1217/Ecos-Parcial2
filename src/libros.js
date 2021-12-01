@@ -84,7 +84,7 @@ export class books{
 
                 });
 
-                let newRating = suma/4;
+                let newRating = suma/5;
                 let ratingBook = newRating.toFixed(1);
     
                 rating.innerHTML = ratingBook;
