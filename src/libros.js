@@ -24,62 +24,77 @@ export class books{
         rating.className = "Brating";
         rating.innerHTML = this.book.RATING;
 
-       
+        let myRating = document.createElement("input");
+        myRating.className = "myRating";
+        myRating.placeholder = "Mi rating"
+        
         //VOTOS
-        let vote1 = document.createElement("button");
-        vote1.className = "1Btn";
-        vote1.innerHTML = "1";
+        let voteBtn = document.createElement("button");
+        voteBtn.className = "voteBtn";
+        voteBtn.innerHTML = "Votar";
 
-        let votes = this.book.RATING;
+        voteBtn.addEventListener("click", (e, ev)=> {
 
-        vote1.addEventListener("click", (e, event) => {
-
-            const db = getDatabase();
-            const bdRef = ref(db, "libros/" + this.book.TITULO);
-            const ratings = ref(db, "libros/" + this.book.TITULO + "/" + this.book.RATING)
-           
-            votes += 1;
-
-            let promedio = rating / votes ;
+            if(parseFloat(myRating.value) >= 0 && parseFloat(myRating.value) <= 5) {
             
-            update(ratings, {"Brating": promedio});
+                const rating = {
 
-           // this.book.RATING ++;
-           // this.book.TOTALVOTOS ++;
-            
-           // set(totalVotos, this.book.TOTALVOTOS );
+                    rating : parseFloat(myRating.value)
+                }
+
+                const db = getDatabase();
+                const newRating = push(ref(db, "libros/" + this.book.TITULO + '/RATING'));
+                set(newRating, rating);
 
             
-           // set (rating, promedio);
+                this.getRatings(rating);
+                
+            } else {
 
-        });
+                alert("Solo valores de 0 a 5");
 
-        let vote2 = document.createElement("button");
-        vote2.className = "2Btn";
-        vote2.innerHTML = "2";
-
-        let vote3 = document.createElement("button");
-        vote3.className = "3Btn";
-        vote3.innerHTML = "3";
-
-        let vote4 = document.createElement("button");
-        vote4.className = "4Btn";
-        vote4.innerHTML = "4";
-
-        let vote5 = document.createElement("button");
-        vote5.className = "5Btn";
-        vote5.innerHTML = "5";
+            }
+        })
 
         card.appendChild(title);
         card.appendChild(rating);
+        card.appendChild(myRating);
+
+        card.appendChild(voteBtn);
         
-        card.appendChild(vote1);
-        card.appendChild(vote2);
-        card.appendChild(vote3);
-        card.appendChild(vote4);
-        card.appendChild(vote5);
 
         return card;
     }
+
+    getRatings(rating) {
+
+        let suma = 0;
+        const db = getDatabase();
+       
+        
+        const ratings = ref(db, "libros/" + this.book.TITULO + "/RATING");
+
+            onValue(ratings, (snapshot)=> {
+
+                const total = snapshot.val();
+          
+                Object.keys(ratings).forEach((key,index)=> {
+
+                    suma += ratings[key].score;
+
+                });
+
+                let newRating = suma/4;
+                let ratingBook = newRating.toFixed(1);
+    
+                rating.innerHTML = ratingBook;
+
+                const bookRef = ref(db, "libros/" + this.book.TITULO);
+
+                update(bookRef, {"RATING": ratingBook});
+
+            });
+    }
+
 
 }
